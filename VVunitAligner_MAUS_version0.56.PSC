@@ -140,7 +140,7 @@ for y from 1 to numberOfFiles
 			... or label$ = "U@" or label$ = "@U" or label$ = "OI" or label$ = "I@"
 			... or label$ = "eI" or label$ = "e@" or label$ = "aU" or label$ = "aI" or label$ = "oI" or label$ = "uI"
 				Set interval text: 1, 'i', "V"
-			elsif label$ = "tS" or label$ = "N=" or label$ = "n=" or label$ = "m=" or label$ = "l=" or label$ = "h\"
+			elsif label$ = "tS" or label$ = "N=" or label$ = "n=" or label$ = "m=" or label$ = "l=" or label$ = "h\" 
 			... or label$ = "h\" or label$ = "dZ" or label$ = "Z" or label$ = "z" or label$ = "w" or label$ = "v" or label$ = "T" 
 			... or label$ = "t" or label$ = "S" or label$ = "s" or label$ = "R" or label$ = "r" or label$ = "P" or label$ = "N"
 			... or label$ = "n" or label$ = "m" or label$ = "l" or label$ = "k" or label$ = "j" or label$ = "h" or label$ = "p"
