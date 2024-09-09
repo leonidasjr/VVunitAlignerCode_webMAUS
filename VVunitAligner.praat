@@ -784,7 +784,7 @@ select Strings tgList
 numberOfTG = Get number of strings
 if save_TextGrid_files == 1
 	appendInfoLine: "--------------------"
-	appendInfoLine: 'numberOfTG', " '.TextGrid' files were created sucssefully"
+	appendInfoLine: 'numberOfTG', " '.TextGrid' files were created"
 	select all
 		minus Strings audioDataList
 		minus Strings tgList
@@ -805,3 +805,4 @@ else
 		appendInfoLine: "--------------------"
 		appendInfoLine: 'tg_objects', " '.TextGrid' files were created in the Praat objects window"
 endif
+writeInfoLine: "VVUnitAligner.praat executed successfully."
