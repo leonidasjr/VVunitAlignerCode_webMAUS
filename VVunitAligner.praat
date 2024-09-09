@@ -1,20 +1,19 @@
-﻿# VVunitAligner.praat #################################################
+# VVunitAligner.praat #################################################
 # Script implemented by Leônidas Silva Jr. (leonidas.silvajr@gmail.com), CH/UEPB, Brazil,
-# based originally on Florian Schiel's webMAUS aligner
-####--------------------- CITATION ---------------------#####
-### KISLER, Thomas, REICHEL, Uwe D., SCHIEL Florian (2017). Multilingual processing of speech via web services. 
+# based originally on Florian Schiel's webMAUS aligner:
+### Kisler, Thomas, Reichel, Uwe D., Schiel, Florian (2017). Multilingual processing of speech via web services. 
 ### Computer Speech & Language, v. 45, p. 326–347. 
 #-#-#-#-#-#-#-#-#-#-#-#-#- C R E D I T S -#-#-#-#-#-#-#-#-#-#-#-#-#
 # Florian Schiel, for the tips about his own webMAUS aligner, and technical suggestions
 #	for post-processing on vowelonset units
 # Plinio Barbosa, for the whole teaching and supervision during my postdoctoral research besides
 #	the crucial tips/suggestions on programming in Praat as well as being a great friend
-# Copyright (C) 2021, 2022 Silva Jr., Leônidas
+# Copyright (C) 2021-2024 Silva Jr., Leônidas
 
-#####============================ HOW TO CITE ====================================##### 
-## Silva Jr., L. (2021-2024). VVUnitAligner. Computer program for Praat (version 1.2).
+#####============================ HOW TO CITE THIS SCRIPT ====================================##### 
+## Silva Jr., L. (2021-2024). VVUnitAligner. Computer program for Praat (version 1.3).
 ## Available in: <https://github.com/leonidasjr/VVunitAlignerCode_webMAUS>
-#####=============================================================================##### 
+#####=========================================================================================##### 
 
 ## Getting started...
 
@@ -556,8 +555,6 @@ for y from 1 to numberOfFiles
 			endif
 			select Intensity 'sound_file$'
 		endfor
-		#select Intensity 'sound_file$'
-		#Remove
 		selectObject: "TextGrid merged"
 		a = 3
 		repeat
@@ -719,19 +716,12 @@ for y from 1 to numberOfFiles
 
 	## Saving TextGrid files
 	if save_TextGrid_files == 1
-		@saveTextGrid
-	endif
-	
-	#####-----#####-----#####-----#####-----#####-----#####
-	procedure saveTextGrid
-		# select TextGrid 'maus$'
-		# Write to text file... 'maus$'.TextGrid
-		# select TextGrid 'mausMasVV$'
-		# Write to text file... 'mausMasVV$'.TextGrid
 		select TextGrid 'sound_file$'
 		Write to text file... 'sound_file$'.TextGrid
-	endproc
-	#####-----#####-----#####-----#####-----#####-----#####
+	endif
+	
+	select TextGrid 'sound_file$'_V
+	Remove
 endfor
 
 ## Counting the TextGrid files (MAUS), and the new ones created: (MAUS<->Phono.Syl., and V_to_V units)
@@ -739,16 +729,16 @@ Create Strings as file list... tgList *.TextGrid
 select Strings tgList
 numberOfTG = Get number of strings
 if save_TextGrid_files == 1
-	#select all
-	#	minus Strings audioDataList
-	#	minus Strings tgList
-	#	Remove
 	select Strings audioDataList
 		plus Strings tgList
 		Append
+	selectObject: "Strings appended"
+	Rename: "Audio_TextGrid_list"
 	select all
-		minus Strings Append
-		Remove
+		minusObject: "Strings Audio_TextGrid_list"
+	Remove
+	selectObject: "Strings Audio_TextGrid_list"
+	writeInfoLine: "VVUnitAligner.praat executed successfully."
 else
 	select all
 		sound_objects = numberOfSelected ("Sound")
@@ -759,5 +749,7 @@ else
 		minusObject (sounds#)
 		minusObject (tgs#)
 	Remove
+	writeInfoLine: "VVUnitAligner.praat executed successfully."
+	appendInfoLine: "---------"
+	appendInfoLine: "Warning: your TextGrid files are not saved."
 endif
-writeInfoLine: "VVUnitAligner.praat executed successfully."
