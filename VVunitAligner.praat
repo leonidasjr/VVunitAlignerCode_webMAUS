@@ -724,7 +724,7 @@ for y from 1 to numberOfFiles
 	Remove
 endfor
 
-## Counting the TextGrid files (MAUS), and the new ones created: (MAUS<->Phono.Syl., and V_to_V units)
+## Clearing Praat object window for (non) "save TextGrid" options
 Create Strings as file list... tgList *.TextGrid
 select Strings tgList
 numberOfTG = Get number of strings
