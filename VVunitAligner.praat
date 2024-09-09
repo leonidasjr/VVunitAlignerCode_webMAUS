@@ -61,8 +61,9 @@ spectral_emphasis_threshold = 400
 
 Create Strings as file list... audioDataList *.wav
 numberOfFiles = Get number of strings
-writeInfoLine: "DATA SUMMARY"
-appendInfoLine: "-----------"
+writeInfoLine: "============"
+appendInfoLine: "Realignment processing. Please wait..."
+appendInfoLine: "============"
 
 for y from 1 to numberOfFiles
 	select Strings audioDataList
@@ -717,15 +718,8 @@ for y from 1 to numberOfFiles
 	Rename... 'mausMasVV$'
 
 	## Saving TextGrid files
-	if save_TextGrid_files = 1
+	if save_TextGrid_files == 1
 		@saveTextGrid
-		@percentFit
-		@dataSummary
-	else
-		#selectObject: "TextGrid merged"
-		#Rename... 'sound_file$'
-		@percentFit
-		@dataSummary
 	endif
 	
 	#####-----#####-----#####-----#####-----#####-----#####
@@ -738,44 +732,6 @@ for y from 1 to numberOfFiles
 		Write to text file... 'sound_file$'.TextGrid
 	endproc
 	#####-----#####-----#####-----#####-----#####-----#####
-	
-	## Counting new tier intervals
-	#####-----#####-----#####-----#####-----#####-----#####
-	procedure percentFit
-		select TextGrid 'mausMasVV$'
-		vCount = Count intervals where: 1, "is equal to", "V"
-		cCount = Count intervals where: 1, "is equal to", "C"
-		vvCount = Count intervals where: 5, "is equal to", "V_to_V"
-		pauseCount = Count intervals where: 1, "is equal to", "#"
-		phonoSylCount = Count intervals where: 3, "is equal to", "PhonoSyl"
-		wordCount = Count intervals where: 7, "is not equal to", ""
-		perc_fit = abs((phonoSylCount - vvCount))*100/(vvCount)
-		perc_fit = 'perc_fit:1'
-	endproc
-	#####-----#####-----#####-----#####-----#####-----#####
-
-	## Data summary
-	#####-----#####-----#####-----#####-----#####-----#####
-	procedure dataSummary
-		appendInfoLine: soundname$, "/.TextGrid"
-		appendInfoLine: ""
-		appendInfoLine: 'vCount', " vowels"
-		appendInfoLine: 'cCount', " consonants"
-		appendInfoLine: 'pauseCount', " pauses"
-		appendInfoLine: 'vvCount', " V_to_V units"
-		appendInfoLine: 'phonoSylCount', " phonological syllables"
-		appendInfoLine: 'wordCount', " words"
-		appendInfoLine: ""
-		appendInfoLine: "Syllable fit correction: ", 'perc_fit', "%"
-		appendInfoLine: ""
-		if y < numberOfFiles
-			appendInfoLine: "#####"
-		endif
-		select TextGrid 'sound_file$'_V
-			plus PointProcess 'sound_file$'_V
-		Remove
-	endproc
-	#####-----#####-----#####-----#####-----#####-----#####
 endfor
 
 ## Counting the TextGrid files (MAUS), and the new ones created: (MAUS<->Phono.Syl., and V_to_V units)
@@ -783,15 +739,16 @@ Create Strings as file list... tgList *.TextGrid
 select Strings tgList
 numberOfTG = Get number of strings
 if save_TextGrid_files == 1
-	appendInfoLine: "--------------------"
-	appendInfoLine: 'numberOfTG', " '.TextGrid' files were created"
-	select all
-		minus Strings audioDataList
-		minus Strings tgList
-		Remove
+	#select all
+	#	minus Strings audioDataList
+	#	minus Strings tgList
+	#	Remove
 	select Strings audioDataList
 		plus Strings tgList
 		Append
+	select all
+		minus Strings Append
+		Remove
 else
 	select all
 		sound_objects = numberOfSelected ("Sound")
@@ -802,7 +759,5 @@ else
 		minusObject (sounds#)
 		minusObject (tgs#)
 	Remove
-		appendInfoLine: "--------------------"
-		appendInfoLine: 'tg_objects', " '.TextGrid' files were created in the Praat objects window"
 endif
 writeInfoLine: "VVUnitAligner.praat executed successfully."
